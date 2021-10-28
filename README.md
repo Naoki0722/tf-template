@@ -9,7 +9,7 @@ default内を書き換え
 variable "userNumber" {
     type= string
     default= "xxxxxxxx"
-    description = "ユーザーのナンバー、arn内にある数字"
+    description = "ユーザーのID、userのarn内にある数字、IAMから確認できる"
 }
 
 variable "forwardKey" {
