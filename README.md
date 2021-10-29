@@ -1,6 +1,6 @@
 # watanabe-test-terraform
 
-## 動作には下記形式のtfファイルを作成する必要があります
+## 動作にはルートディレクトリに下記tfファイルを作成する必要があります
 
 ### variables.tf  
 default内を書き換え
