@@ -32,3 +32,4 @@ override.tf.json
 *tfvars
 >>>>>>> master
 variables.tf
+*.hcl
