@@ -84,7 +84,7 @@ resource "aws_lb_target_group" "awsTargetGroupHTTPS" {
   name                 = "awsTargetGroupHTTPS"
   vpc_id               = aws_vpc.awsVpc.id
   target_type          = "ip"
-  port                 = 80
+  port                 = 443
   protocol             = "HTTPS"
   deregistration_delay = 300
 
@@ -96,7 +96,7 @@ resource "aws_lb_target_group" "awsTargetGroupHTTPS" {
     interval            = 30
     matcher             = 200
     port                = "traffic-port"
-    protocol            = "HTTPS"
+    protocol            = "HTTP"
   }
 
   depends_on = [aws_lb.awsLb]
