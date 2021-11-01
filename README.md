@@ -8,7 +8,7 @@ default内を書き換え
 ```
 variable "userNumber" {
     type= string
-    default= "xxxxxxxx"
+    default= "xxxxx"
     description = "ユーザーのID、userのarn内にある数字、IAMから確認できる"
 }
 
@@ -16,5 +16,11 @@ variable "forwardKey" {
     type= string
     default= "xxxxx"
     description = "cloudFront経由かどうか確認するKey、任意の文字列で良い"   
+}
+
+variable "acmArm" {
+    type= string
+    default= "xxxxx"
+    description = "acmによって作成した証明書のARN"
 }
 ```

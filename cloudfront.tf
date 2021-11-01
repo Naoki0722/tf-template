@@ -1,5 +1,6 @@
 resource "aws_cloudfront_distribution" "static-www" {
     
+    aliases = ["watanabe.dbgso.com"]
     web_acl_id = aws_wafv2_web_acl.default.arn
     origin {
         domain_name = aws_lb.awsLb.dns_name
@@ -11,8 +12,8 @@ resource "aws_cloudfront_distribution" "static-www" {
       custom_origin_config {
         http_port              = "80"
         https_port             = "443"
-        origin_protocol_policy = "http-only"
-        origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+        origin_protocol_policy = "https-only"
+        origin_ssl_protocols   = ["TLSv1.2"]
       }
     }
 
@@ -25,6 +26,7 @@ resource "aws_cloudfront_distribution" "static-www" {
         
         forwarded_values {
             query_string = false
+            headers = ["Host"]
 
             cookies {
               forward = "none"
@@ -44,7 +46,10 @@ resource "aws_cloudfront_distribution" "static-www" {
       }
     }
     viewer_certificate {
-        cloudfront_default_certificate = true
+        cloudfront_default_certificate = false
+        acm_certificate_arn = var.acmArm
+        ssl_support_method = "sni-only"
+        minimum_protocol_version = "TLSv1"
     }
 }
 
