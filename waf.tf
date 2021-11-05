@@ -1,6 +1,6 @@
 resource "aws_wafv2_web_acl" "default" {
-  name = "awsWafv2Acl"
-  description = "testWAF"
+  name = "awsWafv2"
+  description = "WAF"
   scope = "CLOUDFRONT"
   provider = aws.virginia
 

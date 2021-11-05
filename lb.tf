@@ -72,7 +72,7 @@ resource "aws_lb_target_group" "awsTargetGroup" {
     unhealthy_threshold = 2
     timeout             = 5
     interval            = 30
-    matcher             = 200
+    matcher             = 404
     port                = "traffic-port"
     protocol            = "HTTP"
   }
@@ -113,17 +113,17 @@ resource "aws_lb_listener_rule" "awsListenerRule" {
   }
 
   condition {
-    /*
+    
     path_pattern {
       values = ["/*"]
     }
-    */
+    
     
     #Cloud Front経由のアクセスの場合のみForwardする。cloudfront.tfでヘッダーを設定している
-    http_header {
+/*     http_header {
       http_header_name = "x-pre-shared-key"
       values           = ["${var.forwardKey}"]
-    }
+    } */
 
   }
 }
@@ -138,17 +138,17 @@ resource "aws_lb_listener_rule" "awsListenerRuleHTTPS" {
   }
 
   condition {
-    /*
+    
     path_pattern {
       values = ["/*"]
     }
-    */
+    
     
     #Cloud Front経由のアクセスの場合のみForwardする。cloudfront.tfでヘッダーを設定している
-    http_header {
+/*     http_header {
       http_header_name = "x-pre-shared-key"
       values           = ["${var.forwardKey}"]
-    }
+    } */
 
   }
 }

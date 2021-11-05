@@ -37,7 +37,7 @@ resource "aws_ecs_service" "ecsService" {
   load_balancer {
     target_group_arn = aws_lb_target_group.awsTargetGroup.arn
     container_name   = "nginx"
-    container_port   = 80
+    container_port   = 3000
   }
 
   lifecycle {
@@ -50,7 +50,7 @@ module "nginx_sg" {
   source      = "./security_group"
   name        = "nginx-sg"
   vpc_id      = aws_vpc.awsVpc.id
-  port        = 80
+  port        = 3000
   cidr_blocks = [aws_vpc.awsVpc.cidr_block]
 }
 

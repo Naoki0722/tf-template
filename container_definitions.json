@@ -1,7 +1,7 @@
 [
     {
       "name": "nginx",
-      "image": "380476085523.dkr.ecr.us-east-2.amazonaws.com/nginx:latest",
+      "image": "380476085523.dkr.ecr.us-east-2.amazonaws.com/watanabe-test:latest",
       "essential": true,
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -14,7 +14,7 @@
       "portMappings": [
         {
           "protocol": "tcp",
-          "containerPort": 80
+          "containerPort": 3000
         }
       ]
     }
