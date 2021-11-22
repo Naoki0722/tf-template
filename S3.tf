@@ -1,7 +1,7 @@
 # プライベートバケットの定義
 resource "aws_s3_bucket" "private" {
   # バケット名は世界で1意にしなければならない
-  bucket = "watanabe-private-terraform-test"
+  bucket = "watanabe-ecs-private-terraform"
 
   versioning {
     enabled = true
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_public_access_block" "private" {
 
 # パブリックバケットの定義
 resource "aws_s3_bucket" "public" {
-  bucket = "watanabe-public-terraform-test"
+  bucket = "watanabe-ecs-public-terraform"
   acl    = "public-read"
 
   cors_rule {
@@ -41,7 +41,7 @@ resource "aws_s3_bucket" "public" {
 
 # ログバケットの定義
 resource "aws_s3_bucket" "alb_log" {
-  bucket = "alb-log-watanabe-terraform-test"
+  bucket = "alb-log-ecs-watanabe-terraform"
 
   lifecycle_rule {
     enabled = true
@@ -57,6 +57,12 @@ resource "aws_s3_bucket_policy" "alb_log" {
   bucket = aws_s3_bucket.alb_log.id
   policy = data.aws_iam_policy_document.alb_log.json
 }
+
+# CodePipelineのartifact用バケット定義
+resource "aws_s3_bucket" "pipeline_artifact" {
+  acl = "private"
+}
+
 
 data "aws_iam_policy_document" "alb_log" {
   statement {

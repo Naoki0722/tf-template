@@ -35,14 +35,22 @@ resource "aws_ecs_service" "ecsService" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.awsTargetGroup.arn
+    target_group_arn = aws_lb_target_group.blue.arn
     container_name   = "nginx"
-    container_port   = 3000
+    container_port   = 80
   }
-
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+  // deployやautoscaleで動的に変化する値を差分だしたくないので無視する
   lifecycle {
-    ignore_changes = [task_definition]
+    ignore_changes = [
+      desired_count,
+      task_definition,
+      load_balancer,
+    ]
   }
+  propagate_tags = "TASK_DEFINITION"
 }
 
 # ecsで使用するnginxインスタンス向けセキュリティグループ
@@ -50,7 +58,7 @@ module "nginx_sg" {
   source      = "./security_group"
   name        = "nginx-sg"
   vpc_id      = aws_vpc.awsVpc.id
-  port        = 3000
+  port        = 80
   cidr_blocks = [aws_vpc.awsVpc.cidr_block]
 }
 

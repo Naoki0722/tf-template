@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "static-www" {
     viewer_certificate {
         cloudfront_default_certificate = true
         //証明書の設定
-/*         acm_certificate_arn = var.acmArm
+/*      acm_certificate_arn = var.acmArm
         ssl_support_method = "sni-only"
         minimum_protocol_version = "TLSv1"
  */    }

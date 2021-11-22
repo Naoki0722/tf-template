@@ -1,12 +1,12 @@
 [
     {
       "name": "nginx",
-      "image": "380476085523.dkr.ecr.us-east-2.amazonaws.com/watanabe-test:latest",
+      "image": "nginx:latest",
       "essential": true,
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-region": "us-east-2",
+          "awslogs-region": "ap-northeast-2",
           "awslogs-stream-prefix": "nginx",
           "awslogs-group": "/ecs/terraform"
         }
@@ -14,7 +14,7 @@
       "portMappings": [
         {
           "protocol": "tcp",
-          "containerPort": 3000
+          "containerPort": 80
         }
       ]
     }
