@@ -1,3 +1,18 @@
+
+terraform {
+  required_version = ">= 1.0.0"
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "3.45.0"
+    }
+  }
+  backend "s3" {
+    bucket = "watanabe-terraform-state"
+    key = "terraform/terraform.tfstate"
+    region = "ap-northeast-2"
+  }
+}
 provider "aws" {
   region = "ap-northeast-2"
 }
