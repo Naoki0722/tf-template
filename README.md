@@ -45,17 +45,6 @@ locals {
     prefix = "${local.project_code}-${stage}"
     region = "ap-northeast-2"
     vpc_cidr = "10.0.0.0/16"
-    public_availability_zones = {
-      "a" = 0
-      "c" = 1
-    }
-    
-    private_availability_zones = {
-      "a" = 0
-      "c" = 1
-    }
-
-    backend_S3 = "watanabe-terraform-state"
     ecr_name = "${local.project_code}-ECR"
 }
 
