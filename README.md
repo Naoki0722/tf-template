@@ -42,7 +42,7 @@ locals {
     service_name = "testName"
     project_code = "tn"
     stage = "prod"
-    prefix = "${local.project_code}-${stage}"
+    prefix = "${local.project_code}-${local.stage}"
     region = "ap-northeast-2"
     vpc_cidr = "10.0.0.0/16"
     ecr_name = "${local.project_code}-ECR"
