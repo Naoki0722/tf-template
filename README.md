@@ -1,4 +1,4 @@
-# watanabe-test-terraform
+# terraformテンプレート
 
 ## 動作にはルートディレクトリに下記tfファイルを作成する必要があります
 exampleとしてvariables.tf.exampleを用意しておりますので、そちらをリネームして中身を入力していただいても構いません。
