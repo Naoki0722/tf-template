@@ -66,3 +66,4 @@ container_definitions.jsonで指定したnameとcontainerPortと同じ内容で�
 - ContainerName
 - ContainerPort
 
+### その他修正点あり。随時READMEに追記予定
