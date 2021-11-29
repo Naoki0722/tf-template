@@ -54,15 +54,15 @@ locals {
 
 ###container_definitions.json
 初回起動時のコンテナの名前や、コンテナポートの変更が必要。
-変更点
+####変更点
 - name
 - containerPort
 
 なお、imageはnginx:latestとなっているが、こちらはcode関係の設定後自動的に置き換わる
 
 ###appspec.yaml
-container_definitions.jsonで指定したnameとcontainerPortと同じ内容で置き換える
-変更点
+container_definitions.jsonで指定したnameとcontainerPortと同じ内容で置き換える。
+####変更点
 - ContainerName
 - ContainerPort
 
