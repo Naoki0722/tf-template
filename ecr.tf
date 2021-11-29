@@ -1,4 +1,4 @@
 resource "aws_ecr_repository" "main" {
-  name                 = "dandle/server"
+  name                 = "${local.ecr_name}"
   image_tag_mutability = "MUTABLE"
 }

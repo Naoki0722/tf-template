@@ -9,12 +9,12 @@ terraform {
   }
   backend "s3" {
     bucket = "watanabe-terraform-state"
-    key = "terraform/terraform.tfstate"
+    key = "terraform/template/terraform.tfstate"
     region = "ap-northeast-2"
   }
 }
 provider "aws" {
-  region = "ap-northeast-2"
+  region = local.region
 }
 
 provider "aws" {

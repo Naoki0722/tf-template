@@ -1,42 +1,3 @@
-resource "aws_codebuild_project" "main" {
-  name          = "ecs-build"
-  description   = "ecs build"
-  build_timeout = 60
-  service_role  = aws_iam_role.codebuild.arn
-
-  artifacts {
-    type = "CODEPIPELINE"
-  }
-  cache {
-    type  = "LOCAL"
-    modes = ["LOCAL_CUSTOM_CACHE"]
-  }
-
-  logs_config {
-    cloudwatch_logs {
-      status     = "ENABLED"
-      group_name = aws_cloudwatch_log_group.codebuild.name
-      stream_name = aws_cloudwatch_log_stream.codebuild.name
-    }
-    s3_logs {
-      status = "DISABLED"
-    }
-  }
-
-  source {
-    type      = "CODEPIPELINE"
-    buildspec = "buildspec.yaml"
-  }
-
-  environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:3.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
-  }
-}
-
 data "aws_iam_policy_document" "codebuild_assumerole" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -97,12 +58,12 @@ data "aws_iam_policy_document" "codebuild" {
 }
 
 resource "aws_iam_role" "codebuild" {
-  name               = "ecs-pipeline-codebuild"
+  name               = "${local.project_code}-ecs-pipeline-codebuild"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assumerole.json
 }
 
 resource "aws_iam_role_policy" "codebuild" {
-  name   = "ecs-pipeline-codebuild"
+  name   = "${local.project_code}-ecs-pipeline-codebuild"
   role   = aws_iam_role.codebuild.id
   policy = data.aws_iam_policy_document.codebuild.json
 }

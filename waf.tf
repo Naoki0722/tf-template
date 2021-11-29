@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "default" {
-  name = "awsWafv2"
+  name = "${local.project_code}-service-Wafv2"
   description = "WAF"
   scope = "CLOUDFRONT"
   provider = aws.virginia

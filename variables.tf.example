@@ -1,29 +1,50 @@
 variable "userNumber" {
     type= string
-    default= "xxxxxxx"
-    description = "ユーザーのID、userのarn内にある数字、IAMから確認できる"
+    default= "xxxxxxxxxx"
+    description = "ユーザーのナンバー、arn内にある数字"
 }
 
 variable "forwardKey" {
     type= string
-    default= "xxxxxxx"
-    description = "cloudFront経由かどうか確認するKey、任意の文字列で良い"   
+    default= "xxxxxxxxxx"
+    description = "cloudFront経由かどうか確認するKey"   
 }
 
 variable "acmArm" {
-    type= string
-    default= "xxxxxxxx"
-    description = "acmによって作成した証明書のARN、acmを使用する場合は別途設定が必要、使わない場合はこのままで"
+    type = string
+    default = "xxxxxxxxxx"
+    description = "acmによって作成した証明書のARN"
 }
 
 variable "gitRep" {
-    type= string
-    default= "xxxxx"
+    type = string
+    default = "xxxxxxxxxx"
     description = "対象プロジェクトが格納されているgithubのリポジトリ、Saatisfy/watanabe-test-terraform  の様な形式"
 }
 
 variable "gitRepBranch" {
-    type= string
-    default= "xxxxx"
+    type = string
+    default = "xxxxxxxxxx"
     description = "gitRepで入力したgithubのリポジトリ内の、変更を検知したいブランチ名"
+}
+
+locals {
+    service_name = "testName"
+    project_code = "tn"
+    stage = "prod"
+    prefix = "${local.project_code}-${stage}"
+    region = "ap-northeast-2"
+    vpc_cidr = "10.0.0.0/16"
+    public_availability_zones = {
+      "a" = 0
+      "c" = 1
+    }
+    
+    private_availability_zones = {
+      "a" = 0
+      "c" = 1
+    }
+
+    backend_S3 = "watanabe-terraform-state"
+    ecr_name = "${local.project_code}-ECR"
 }

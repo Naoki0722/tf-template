@@ -1,6 +1,6 @@
 [
     {
-      "name": "nginx",
+      "name": "tn-api",
       "image": "nginx:latest",
       "essential": true,
       "logConfiguration": {
@@ -8,7 +8,7 @@
         "options": {
           "awslogs-region": "ap-northeast-2",
           "awslogs-stream-prefix": "nginx",
-          "awslogs-group": "/ecs/terraform"
+          "awslogs-group": "/ecs/service"
         }
       },
       "portMappings": [
