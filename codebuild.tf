@@ -55,6 +55,11 @@ data "aws_iam_policy_document" "codebuild" {
       actions = ["codestar-connections:UseConnection"]
       resources = [aws_codestarconnections_connection.github.arn]
     }
+  statement {
+      effect = "Allow"
+      actions = [ "secretsmanager:GetSecretValue" ]
+      resources = ["*"]
+  }
 }
 
 resource "aws_iam_role" "codebuild" {

@@ -368,6 +368,24 @@ resource "aws_codebuild_project" "main" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
+    environment_variable {
+      name = "aws_access_key_id"
+      type = "SECRETS_MANAGER"
+      value = "${local.project_code}-aws_token:aws_access_key_id"
+    }
+
+    environment_variable {
+      name = "aws_secret_access_key"
+      type = "SECRETS_MANAGER"
+      value = "${local.project_code}-aws_token:aws_secret_access_key"
+    }
+
+    environment_variable {
+      name = "aws_region"
+      type = "SECRETS_MANAGER"
+      value = "${local.project_code}-aws_token:aws_region"
+    }
+
   }
 }
 

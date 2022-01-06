@@ -8,8 +8,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "watanabe-terraform-state"
-    key = "terraform/template/terraform.tfstate"
+    bucket = "terraform-state"
+    key = "terraform/terraform.tfstate"
     region = "ap-northeast-2"
   }
 }
