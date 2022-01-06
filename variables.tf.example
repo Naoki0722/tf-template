@@ -37,4 +37,11 @@ locals {
     vpc_cidr = "10.0.0.0/16"
 
     ecr_name = "${local.project_code}-ECR"
+
+    #AWS認証情報
+    aws_token = {
+        aws_access_key_id = "xxxxxx"
+        aws_secret_access_key = "xxxxxxx"
+        aws_region = "xxxxxxxx"
+    }
 }
