@@ -44,4 +44,6 @@ locals {
         aws_secret_access_key = "xxxxxxx"
         aws_region = "xxxxxxxx"
     }
+
+    deployAction = "STOP_DEPLOYMENT"
 }

@@ -414,7 +414,7 @@ resource "aws_codedeploy_deployment_group" "main" {
 
   blue_green_deployment_config {
     deployment_ready_option {
-        action_on_timeout = "CONTINUE_DEPLOYMENT"
+        action_on_timeout = "${local.deployAction}"
     }
     terminate_blue_instances_on_deployment_success {
       action = "TERMINATE"
