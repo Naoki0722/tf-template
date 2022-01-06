@@ -36,7 +36,7 @@ locals {
     region = "ap-northeast-2"
     vpc_cidr = "10.0.0.0/16"
 
-    ecr_name = "${local.project_code}-ECR"
+    ecr_name = "${local.project_code}-ecr"
 
     #AWS認証情報
     aws_token = {
