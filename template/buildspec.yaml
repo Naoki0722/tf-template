@@ -22,4 +22,4 @@ artifacts:
   files: 
     - imageDetail.json
     - appspec.yaml
-    - container_definitions.json
+    - service.json
