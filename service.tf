@@ -32,12 +32,12 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "fixed-response"
+    type = "fixed-response"
 
     fixed_response {
       content_type = "text/plain"
       message_body = "OK"
-      status_code = "200"
+      status_code  = "200"
     }
   }
   lifecycle {
@@ -100,9 +100,9 @@ resource "aws_lb_listener_rule" "awsListenerRule" {
     target_group_arn = aws_lb_target_group.blue.arn
   }
 
-  condition {   
+  condition {
     #Cloud Front経由のアクセスの場合のみForwardする。cloudfront.tfでヘッダーを設定している
-     http_header {
+    http_header {
       http_header_name = "x-pre-shared-key"
       values           = ["${var.forwardKey}"]
     }
@@ -114,59 +114,59 @@ resource "aws_lb_listener_rule" "awsListenerRule" {
 #Cloud Front
 #############
 resource "aws_cloudfront_distribution" "static-www" {
-    //代替ドメイン
-    //aliases = ["watanabe.dbgso.com"]
-    web_acl_id = aws_wafv2_web_acl.default.arn
-    origin {
-        domain_name = aws_lb.awsLb.dns_name
-        origin_id = aws_lb.awsLb.dns_name
-        custom_header {
-          name  = "x-pre-shared-key"
-          value = "${var.forwardKey}"
-        }
-      custom_origin_config {
-        http_port              = "80"
-        https_port             = "443"
-        origin_protocol_policy = "http-only"
-        origin_ssl_protocols   = ["TLSv1.2"]
+  //代替ドメイン
+  //aliases = ["watanabe.dbgso.com"]
+  web_acl_id = aws_wafv2_web_acl.default.arn
+  origin {
+    domain_name = aws_lb.awsLb.dns_name
+    origin_id   = aws_lb.awsLb.dns_name
+    custom_header {
+      name  = "x-pre-shared-key"
+      value = var.forwardKey
+    }
+    custom_origin_config {
+      http_port              = "80"
+      https_port             = "443"
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  enabled = true
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_lb.awsLb.dns_name
+
+    forwarded_values {
+      query_string = false
+      headers      = ["Host"]
+
+      cookies {
+        forward = "none"
       }
     }
 
-    enabled =  true
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
 
-    default_cache_behavior {
-        allowed_methods = [ "GET", "HEAD" ]
-        cached_methods = [ "GET", "HEAD" ]
-        target_origin_id = aws_lb.awsLb.dns_name
-        
-        forwarded_values {
-            query_string = false
-            headers = ["Host"]
-
-            cookies {
-              forward = "none"
-            }
-        }
-
-        viewer_protocol_policy = "redirect-to-https"
-        min_ttl = 0
-        default_ttl = 3600
-        max_ttl = 86400
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["JP"]
     }
-
-    restrictions {
-      geo_restriction {
-          restriction_type = "whitelist"
-          locations = [ "JP" ]
-      }
-    }
-    viewer_certificate {
-        cloudfront_default_certificate = true
-        //証明書の設定
-        # acm_certificate_arn = var.acmArm
-        # ssl_support_method = "sni-only"
-        # minimum_protocol_version = "TLSv1"
-    }
+  }
+  viewer_certificate {
+    cloudfront_default_certificate = true
+    //証明書の設定
+    # acm_certificate_arn = var.acmArm
+    # ssl_support_method = "sni-only"
+    # minimum_protocol_version = "TLSv1"
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "static-www" {}
@@ -201,7 +201,7 @@ resource "aws_ecs_task_definition" "ecsTask" {
           "awslogs-group" : "/ecs/service"
         }
       },
-      environment: var.environments,
+      environment : var.environments,
       "portMappings" : [
         {
           "protocol" : "tcp",
@@ -263,7 +263,7 @@ resource "aws_cloudwatch_log_group" "for_ecs" {
 #############
 
 resource "aws_cloudwatch_log_group" "codebuild" {
-    name = "/codebuild/${local.project_code}ecs-pipeline"
+  name = "/codebuild/${local.project_code}ecs-pipeline"
 }
 
 resource "aws_cloudwatch_log_stream" "codebuild" {
@@ -277,75 +277,75 @@ resource "aws_cloudwatch_log_stream" "codebuild" {
 #############
 
 resource "aws_codepipeline" "main" {
-    name = "${local.project_code}-ecs-pipeline"
-    role_arn = aws_iam_role.codepipeline.arn
+  name     = "${local.project_code}-ecs-pipeline"
+  role_arn = aws_iam_role.codepipeline.arn
 
-    artifact_store {
-       type = "S3"
-       location = aws_s3_bucket.pipeline_artifact.id
-    }
+  artifact_store {
+    type     = "S3"
+    location = aws_s3_bucket.pipeline_artifact.id
+  }
 
-    stage {
-      name = "Source"
-      action {
-          name = "Source"
-          category = "Source"
-          owner = "AWS"
-          provider = "CodeStarSourceConnection"
-          version = "1"
-          run_order = 1
-          output_artifacts = ["source"]
-          configuration = {
-              ConnectionArn = aws_codestarconnections_connection.github.arn
-              FullRepositoryId = var.gitRep
-              BranchName = var.gitRepBranch
-              OutputArtifactFormat = "CODEBUILD_CLONE_REF"
-          }
-      }
-      
-    }
-
-    stage {
-      name = "Build"
-      action {
-          name = "Build"
-          category = "Build"
-          owner = "AWS"
-          provider = "CodeBuild"
-          version = "1"
-          run_order = 2
-          input_artifacts = ["source"]
-          output_artifacts = ["build"]
-          configuration = {
-              ProjectName = "ecs-build"
-          }
+  stage {
+    name = "Source"
+    action {
+      name             = "Source"
+      category         = "Source"
+      owner            = "AWS"
+      provider         = "CodeStarSourceConnection"
+      version          = "1"
+      run_order        = 1
+      output_artifacts = ["source"]
+      configuration = {
+        ConnectionArn        = aws_codestarconnections_connection.github.arn
+        FullRepositoryId     = var.gitRep
+        BranchName           = var.gitRepBranch
+        OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
 
-    stage {
-      name = "Deploy"
+  }
 
-      action {
-          name = "DeployApp"
-          category = "Deploy"
-          owner = "AWS"
-          provider = "CodeDeployToECS"
-          input_artifacts = ["build"]
-          version = 1
-          run_order = 3
-
-          configuration = {
-              ApplicationName = aws_codedeploy_app.main.name
-              DeploymentGroupName = aws_codedeploy_app.main.name
-              TaskDefinitionTemplateArtifact = "build"
-              TaskDefinitionTemplatePath = "service.json"
-              AppSpecTemplateArtifact = "build"
-              AppSpecTemplatePath = "appspec.yaml"
-              Image1ArtifactName = "build"
-        Image1ContainerName = "${local.project_code}-api"
-          }
+  stage {
+    name = "Build"
+    action {
+      name             = "Build"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      run_order        = 2
+      input_artifacts  = ["source"]
+      output_artifacts = ["build"]
+      configuration = {
+        ProjectName = "ecs-build"
       }
     }
+  }
+
+  stage {
+    name = "Deploy"
+
+    action {
+      name            = "DeployApp"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "CodeDeployToECS"
+      input_artifacts = ["build"]
+      version         = 1
+      run_order       = 3
+
+      configuration = {
+        ApplicationName                = aws_codedeploy_app.main.name
+        DeploymentGroupName            = aws_codedeploy_app.main.name
+        TaskDefinitionTemplateArtifact = "build"
+        TaskDefinitionTemplatePath     = "service.json"
+        AppSpecTemplateArtifact        = "build"
+        AppSpecTemplatePath            = "appspec.yaml"
+        Image1ArtifactName             = "build"
+        Image1ContainerName            = "${local.project_code}-api"
+      }
+    }
+  }
 }
 
 
@@ -369,8 +369,8 @@ resource "aws_codebuild_project" "main" {
 
   logs_config {
     cloudwatch_logs {
-      status     = "ENABLED"
-      group_name = aws_cloudwatch_log_group.codebuild.name
+      status      = "ENABLED"
+      group_name  = aws_cloudwatch_log_group.codebuild.name
       stream_name = aws_cloudwatch_log_stream.codebuild.name
     }
     s3_logs {
@@ -390,20 +390,20 @@ resource "aws_codebuild_project" "main" {
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
     environment_variable {
-      name = "aws_access_key_id"
-      type = "SECRETS_MANAGER"
+      name  = "aws_access_key_id"
+      type  = "SECRETS_MANAGER"
       value = "${local.project_code}-aws_token:aws_access_key_id"
     }
 
     environment_variable {
-      name = "aws_secret_access_key"
-      type = "SECRETS_MANAGER"
+      name  = "aws_secret_access_key"
+      type  = "SECRETS_MANAGER"
       value = "${local.project_code}-aws_token:aws_secret_access_key"
     }
 
     environment_variable {
-      name = "aws_region"
-      type = "SECRETS_MANAGER"
+      name  = "aws_region"
+      type  = "SECRETS_MANAGER"
       value = "${local.project_code}-aws_token:aws_region"
     }
 
@@ -417,19 +417,19 @@ resource "aws_codebuild_project" "main" {
 
 resource "aws_codedeploy_app" "main" {
   compute_platform = "ECS"
-  name = "${local.service_name}-api"
+  name             = "${local.service_name}-api"
 }
 
 resource "aws_codedeploy_deployment_group" "main" {
-  deployment_group_name = "${local.service_name}-api"
+  deployment_group_name  = "${local.service_name}-api"
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
-  app_name = aws_codedeploy_app.main.name
-  service_role_arn = aws_iam_role.codedeploy.arn
+  app_name               = aws_codedeploy_app.main.name
+  service_role_arn       = aws_iam_role.codedeploy.arn
 
   auto_rollback_configuration {
     enabled = true
     events = [
-        "DEPLOYMENT_FAILURE"
+      "DEPLOYMENT_FAILURE"
     ]
   }
 
@@ -439,14 +439,14 @@ resource "aws_codedeploy_deployment_group" "main" {
       wait_time_in_minutes = 30
     }
     terminate_blue_instances_on_deployment_success {
-      action = "TERMINATE"
+      action                           = "TERMINATE"
       termination_wait_time_in_minutes = 5
     }
   }
 
   deployment_style {
     deployment_option = "WITH_TRAFFIC_CONTROL"
-    deployment_type = "BLUE_GREEN"
+    deployment_type   = "BLUE_GREEN"
   }
 
   ecs_service {
@@ -457,9 +457,9 @@ resource "aws_codedeploy_deployment_group" "main" {
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-          listener_arns = [
-              aws_lb_listener.http.arn
-          ]
+        listener_arns = [
+          aws_lb_listener.http.arn
+        ]
       }
       target_group {
         name = aws_lb_target_group.blue.name
