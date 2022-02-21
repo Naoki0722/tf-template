@@ -188,8 +188,29 @@ resource "aws_ecs_task_definition" "ecsTask" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  container_definitions    = file("./container_definitions/service.json")
-  execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
+  container_definitions = jsonencode([
+    {
+      "name" : "${local.project_code}-api",
+      "image" : "nginx:latest",
+      "essential" : true,
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${local.region}",
+          "awslogs-stream-prefix" : "${local.project_code}-api",
+          "awslogs-group" : "/ecs/service"
+        }
+      },
+      environment: var.environments,
+      "portMappings" : [
+        {
+          "protocol" : "tcp",
+          "containerPort" : 80
+        }
+      ]
+    }
+  ])
+  execution_role_arn = module.ecs_task_execution_role.iam_role_arn
 }
 
 # サービス定義
@@ -321,7 +342,7 @@ resource "aws_codepipeline" "main" {
               AppSpecTemplateArtifact = "build"
               AppSpecTemplatePath = "appspec.yaml"
               Image1ArtifactName = "build"
-              Image1ContainerName = "IMAGE1_NAME"
+        Image1ContainerName = "${local.project_code}-api"
           }
       }
     }
