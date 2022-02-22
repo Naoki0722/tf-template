@@ -392,19 +392,19 @@ resource "aws_codebuild_project" "main" {
     environment_variable {
       name  = "aws_access_key_id"
       type  = "SECRETS_MANAGER"
-      value = "${local.project_code}-aws_token:aws_access_key_id"
+      value = "${aws_secretsmanager_secret.aws_token.name}:aws_access_key_id"
     }
 
     environment_variable {
       name  = "aws_secret_access_key"
       type  = "SECRETS_MANAGER"
-      value = "${local.project_code}-aws_token:aws_secret_access_key"
+      value = "${aws_secretsmanager_secret.aws_token.name}:aws_secret_access_key"
     }
 
     environment_variable {
       name  = "aws_region"
       type  = "SECRETS_MANAGER"
-      value = "${local.project_code}-aws_token:aws_region"
+      value = "${aws_secretsmanager_secret.aws_token.name}:aws_region"
     }
 
   }
