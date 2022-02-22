@@ -317,7 +317,7 @@ resource "aws_codepipeline" "main" {
       input_artifacts  = ["source"]
       output_artifacts = ["build"]
       configuration = {
-        ProjectName = "ecs-build"
+        ProjectName = aws_codebuild_project.main.name
       }
     }
   }
@@ -342,7 +342,7 @@ resource "aws_codepipeline" "main" {
         AppSpecTemplateArtifact        = "build"
         AppSpecTemplatePath            = "appspec.yaml"
         Image1ArtifactName             = "build"
-        Image1ContainerName            = "${local.project_code}-api"
+        Image1ContainerName            = "IMAGE1_NAME"
       }
     }
   }
