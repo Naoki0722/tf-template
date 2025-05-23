@@ -1,21 +1,21 @@
 [
-    {
-      "name": "tn-api",
-      "image": "nginx:latest",
-      "essential": true,
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-region": "ap-northeast-2",
-          "awslogs-stream-prefix": "nginx",
-          "awslogs-group": "/ecs/service"
-        }
-      },
-      "portMappings": [
-        {
-          "protocol": "tcp",
-          "containerPort": 80
-        }
-      ]
-    }
-  ]
+  {
+    "name": "tn-api",
+    "image": "nginx:latest",
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "nginx",
+        "awslogs-group": "/ecs/service"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ]
+  }
+]

@@ -33,7 +33,7 @@ locals {
     project_code = "tn"
     stage = "prod"
     prefix = "${local.project_code}-${local.stage}"
-    region = "ap-northeast-2"
+    region = "ap-northeast-1"
     vpc_cidr = "10.0.0.0/16"
 
     ecr_name = "${local.project_code}-ecr"
