@@ -1,4 +1,3 @@
-service_name = "サービス名(hogehoge-service)"
 project_code = "任意のプロジェクトコード. 長過ぎるとエラーが出るため10文字程度"
 userNumber   = "AWSのアカウントID"
 forwardKey   = "任意のランダム文字列"
