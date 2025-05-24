@@ -36,12 +36,6 @@ variable "project_code" {
   description = "プロジェクトコード"
 }
 
-variable "scm_id" {
-  type = string
-  default = "1"
-  description = "secretmanager重複対策のキー"
-}
-
 variable "aws" {
   type = object({
     region            = string
@@ -69,5 +63,4 @@ locals {
   profile = var.aws.profile
 
   deployAction = "STOP_DEPLOYMENT"
-  scm_id = var.scm_id
 }
