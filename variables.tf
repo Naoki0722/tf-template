@@ -31,11 +31,6 @@ variable "environments" {
   description = "コンテナ向け環境変数"
 }
 
-variable "service_name" {
-  type        = string
-  description = "サービス名"
-}
-
 variable "project_code" {
   type        = string
   description = "プロジェクトコード"
@@ -64,7 +59,6 @@ variable "vpc_cidr" {
 }
 
 locals {
-  service_name = var.service_name
   project_code = var.project_code
   stage        = terraform.workspace
   prefix       = "${local.project_code}-${local.stage}"
