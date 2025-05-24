@@ -417,11 +417,11 @@ resource "aws_codebuild_project" "main" {
 
 resource "aws_codedeploy_app" "main" {
   compute_platform = "ECS"
-  name             = "${local.service_name}-api"
+  name             = "${local.project_code}-api"
 }
 
 resource "aws_codedeploy_deployment_group" "main" {
-  deployment_group_name  = "${local.service_name}-api"
+  deployment_group_name  = "${local.project_code}-api"
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
   app_name               = aws_codedeploy_app.main.name
   service_role_arn       = aws_iam_role.codedeploy.arn

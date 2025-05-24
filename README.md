@@ -40,6 +40,26 @@ cp example.tfvars terraform.tfvars
 - 環境変数
 - ACM証明書ARN（オプション）
 
+### 1-1. 認証情報設定
+
+基本的にはAWSのProfileを使って設定する
+
+```sh
+# 新しいプロファイルを設定
+aws configure --profile your-profile-name
+
+# 設定内容の確認
+aws configure list --profile your-profile-name
+```
+
+applyする前には以下環境変数指定が必要
+
+
+```sh
+# プロファイルを環境変数で指定
+export AWS_PROFILE=your-profile-name
+```
+
 ### 2. Terraformの初期化と適用
 
 ```sh
@@ -94,4 +114,3 @@ GitHubリポジトリの指定ブランチへのプッシュがトリガーと�
 - `terraform.tfvars`は機密情報を含むため、Gitリポジトリにコミットしないでください
 - WAFはCloudFrontスコープで作成されるため、us-east-1リージョンのプロバイダーを使用しています
 - 初回デプロイ後にCodeStar Connectionの手動承認が必要です
-

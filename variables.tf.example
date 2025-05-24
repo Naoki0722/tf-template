@@ -7,7 +7,7 @@ variable "userNumber" {
 variable "forwardKey" {
     type= string
     default= "xxxxxxxxxx"
-    description = "cloudFront経由かどうか確認するKey"   
+    description = "cloudFront経由かどうか確認するKey"
 }
 
 variable "acmArm" {
@@ -29,7 +29,6 @@ variable "gitRepBranch" {
 }
 
 locals {
-    service_name = "testName"
     project_code = "tn"
     stage = "prod"
     prefix = "${local.project_code}-${local.stage}"
