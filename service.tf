@@ -389,24 +389,14 @@ resource "aws_codebuild_project" "main" {
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
-    environment_variable {
-      name  = "aws_access_key_id"
-      type  = "SECRETS_MANAGER"
-      value = "${aws_secretsmanager_secret.aws_token.name}:aws_access_key_id"
-    }
+
+    # AWS認証はCodeBuildのIAMロール (service_role) を使用
+    # 環境変数での認証情報は不要
 
     environment_variable {
-      name  = "aws_secret_access_key"
-      type  = "SECRETS_MANAGER"
-      value = "${aws_secretsmanager_secret.aws_token.name}:aws_secret_access_key"
+      name  = "AWS_DEFAULT_REGION"
+      value = local.region
     }
-
-    environment_variable {
-      name  = "aws_region"
-      type  = "SECRETS_MANAGER"
-      value = "${aws_secretsmanager_secret.aws_token.name}:aws_region"
-    }
-
   }
 }
 

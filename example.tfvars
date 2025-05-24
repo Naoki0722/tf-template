@@ -10,8 +10,6 @@ environments = [{
 }]
 
 aws = {
-  access_key_id     = "id"
-  secret_access_key = "secret"
   region            = "ap-northeast-1"
   profile           = "my profile"
 }
