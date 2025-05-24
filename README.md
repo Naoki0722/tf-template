@@ -25,7 +25,7 @@
 
 ## 使用方法
 
-### 1. 変数の設定
+### 1-1. 変数の設定
 
 `example.tfvars`をコピーして`terraform.tfvars`を作成し、必要な値を設定します：
 
@@ -40,7 +40,7 @@ cp example.tfvars terraform.tfvars
 - 環境変数
 - ACM証明書ARN（オプション）
 
-### 1-1. 認証情報設定
+### 1-2. 認証情報設定
 
 基本的にはAWSのProfileを使って設定する
 

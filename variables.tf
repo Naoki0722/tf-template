@@ -44,12 +44,10 @@ variable "scm_id" {
 
 variable "aws" {
   type = object({
-    access_key_id     = string
-    secret_access_key = string
     region            = string
     profile           = string
   })
-  description = "aws profile情報"
+  description = "aws profile情報（profileを使用する場合、access_key_idとsecret_access_keyは不要）"
 }
 
 variable "vpc_cidr" {
@@ -69,11 +67,6 @@ locals {
 
   # AWS認証情報
   profile = var.aws.profile
-  aws_token = {
-    aws_access_key_id     = var.aws.access_key_id
-    aws_secret_access_key = var.aws.secret_access_key
-    aws_region            = var.aws.region
-  }
 
   deployAction = "STOP_DEPLOYMENT"
   scm_id = var.scm_id
