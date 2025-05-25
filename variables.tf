@@ -50,6 +50,32 @@ variable "vpc_cidr" {
   description = "VPCのcidr"
 }
 
+variable "rds_config" {
+  type = object({
+    engine             = string
+    engine_version     = string
+    instance_class     = string
+    allocated_storage  = number
+    database_name      = string
+    username           = string
+    backup_retention   = number
+    multi_az           = bool
+    storage_encrypted  = bool
+  })
+  default = {
+    engine             = "mysql"
+    engine_version     = "8.0"
+    instance_class     = "db.t3.micro"
+    allocated_storage  = 20
+    database_name      = "appdb"
+    username           = "admin"
+    backup_retention   = 7
+    multi_az           = true
+    storage_encrypted  = true
+  }
+  description = "RDS設定"
+}
+
 locals {
   project_code = var.project_code
   stage        = terraform.workspace

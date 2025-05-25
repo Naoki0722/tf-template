@@ -12,6 +12,16 @@ data "aws_iam_policy_document" "ecs_task_execution" {
     actions   = ["ssm:GetParameters", "kms:Decrypt"]
     resources = ["*"]
   }
+
+  # Secrets Manager access for RDS password
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret"
+    ]
+    resources = [aws_db_instance.main.master_user_secret[0].secret_arn]
+  }
 }
 
 # ECSタスク実行ロールの作成
@@ -51,7 +61,30 @@ resource "aws_ecs_task_definition" "ecsTask" {
           "awslogs-group" : "/ecs/service"
         }
       },
-      environment : var.environments,
+      environment : concat(var.environments, [
+        {
+          "name" : "DB_HOST",
+          "value" : aws_db_instance.main.endpoint
+        },
+        {
+          "name" : "DB_PORT",
+          "value" : tostring(aws_db_instance.main.port)
+        },
+        {
+          "name" : "DB_NAME",
+          "value" : aws_db_instance.main.db_name
+        },
+        {
+          "name" : "DB_USERNAME",
+          "value" : aws_db_instance.main.username
+        }
+      ]),
+      secrets : [
+        {
+          "name" : "DB_PASSWORD",
+          "valueFrom" : aws_db_instance.main.master_user_secret[0].secret_arn
+        }
+      ],
       "portMappings" : [
         {
           "protocol" : "tcp",

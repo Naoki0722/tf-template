@@ -10,9 +10,10 @@
 
 - **ネットワーク**: VPC、パブリック/プライベートサブネット、インターネットゲートウェイ、NATゲートウェイ
 - **コンテナ**: ECSクラスター、ECSサービス（Fargate）、ECRリポジトリ
+- **データベース**: RDS（MySQL/PostgreSQL）、DB Subnet Group、セキュリティグループ
 - **CI/CD**: CodePipeline、CodeBuild、CodeDeploy（ブルー/グリーンデプロイ）
 - **ロードバランシング**: Application Load Balancer (ALB)、CloudFront
-- **セキュリティ**: WAFv2、セキュリティグループ、IAMロール
+- **セキュリティ**: WAFv2、セキュリティグループ、IAMロール、Secrets Manager
 - **ストレージ**: S3バケット（ログ、アーティファクト用）
 - **ログ**: CloudWatch Logs
 
@@ -38,6 +39,7 @@ cp example.tfvars terraform.tfvars
 - サービス名とプロジェクトコード
 - GitHubリポジトリ情報（リポジトリ名、ブランチ名）
 - 環境変数
+- RDS設定（エンジン、インスタンスクラス、ストレージ、データベース名など）
 - ACM証明書ARN（オプション）
 
 ### 1-2. 認証情報設定
@@ -104,8 +106,9 @@ GitHubリポジトリの指定ブランチへのプッシュがトリガーと�
 - `network.tf`: VPC、サブネット、ルートテーブル等
 - `outputs.tf`: 出力変数の定義
 - `provider.tf`: Terraformプロバイダー設定
+- `rds.tf`: RDSインスタンス、DB Subnet Group、関連IAMロール設定
 - `S3.tf`: S3バケット定義
-- `security_group.tf`: セキュリティグループ設定
+- `security_groups.tf`: セキュリティグループ設定（ALB、ECS、RDS用）
 - `variables.tf`: 入力変数の定義
 - `waf.tf`: WAFv2 Web ACL設定
 - `container_definitions/`: ECSタスク定義テンプレート
@@ -119,3 +122,36 @@ GitHubリポジトリの指定ブランチへのプッシュがトリガーと�
 - `terraform.tfvars`は機密情報を含むため、Gitリポジトリにコミットしないでください
 - WAFはCloudFrontスコープで作成されるため、us-east-1リージョンのプロバイダーを使用しています
 - 初回デプロイ後にCodeStar Connectionの手動承認が必要です
+- RDSのマスターパスワードはSecrets Managerで自動管理されます
+- 本番環境では、RDSの `deletion_protection` を `true` に設定することを推奨します
+- RDSインスタンスの削除時には自動的にスナップショットが作成されます
+
+## RDSについて
+
+### データベース接続情報の取得
+
+RDSインスタンスの接続情報は、以下のTerraform outputで取得できます：
+
+```sh
+# エンドポイント
+terraform output rds_endpoint
+
+# ポート番号
+terraform output rds_port
+
+# データベース名
+terraform output rds_database_name
+
+# マスターパスワードのSecrets Manager ARN
+terraform output rds_master_user_secret_arn
+```
+
+### ECSタスクからのデータベースアクセス
+
+ECSタスクはSecrets Managerからパスワードを自動取得してRDSに接続できます。アプリケーション側では以下の環境変数が利用可能です：
+
+- `DB_HOST`: RDSエンドポイント
+- `DB_PORT`: ポート番号
+- `DB_NAME`: データベース名
+- `DB_USERNAME`: マスターユーザー名
+- `DB_PASSWORD_SECRET_ARN`: パスワードのSecrets Manager ARN
