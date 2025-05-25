@@ -8,5 +8,5 @@ output "alb_id" {
 }
 
 output "forwardKey" {
-  value = "${var.forwardKey}"
+  value = var.forwardKey
 }

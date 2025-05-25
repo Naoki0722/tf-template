@@ -38,8 +38,8 @@ variable "project_code" {
 
 variable "aws" {
   type = object({
-    region            = string
-    profile           = string
+    region  = string
+    profile = string
   })
   description = "aws profile情報（profileを使用する場合、access_key_idとsecret_access_keyは不要）"
 }
