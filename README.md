@@ -96,18 +96,23 @@ GitHubリポジトリの指定ブランチへのプッシュがトリガーと�
 ## ファイル構成
 
 - `alb.tf`: ALB関連のリソース定義
-- `codebuild.tf, codedeploy.tf, codepipeline.tf`: CI/CDパイプラインの各コンポーネント設定
+- `cloudfront.tf`: CloudFrontディストリビューション設定
+- `codebuild.tf, codedeploy.tf, codepipeline.tf`: CI/CDパイプライン設定
 - `ecr.tf`: ECRリポジトリの定義
 - `ecs.tf`: ECSタスク実行ロールと関連セキュリティグループ
+- `monitoring.tf`: CloudWatchアラームとログ設定
 - `network.tf`: VPC、サブネット、ルートテーブル等
+- `outputs.tf`: 出力変数の定義
 - `provider.tf`: Terraformプロバイダー設定
 - `S3.tf`: S3バケット定義
-- `scm.tf`: Secrets Manager設定
-- `service.tf`: メインのサービス定義（ECS、CloudFront等）
+- `security_group.tf`: セキュリティグループ設定
 - `variables.tf`: 入力変数の定義
 - `waf.tf`: WAFv2 Web ACL設定
 - `container_definitions/`: ECSタスク定義テンプレート
 - `template/`: CodeBuild/CodeDeploy用テンプレート
+- `iam_role/`: IAMロール定義
+- `policy/`: IAMポリシー定義
+- `security_group/`: セキュリティグループ定義
 
 ## 注意事項
 

@@ -2,8 +2,8 @@
 #Cloud Front
 #############
 resource "aws_cloudfront_distribution" "static-www" {
-  //代替ドメイン
-  //aliases = ["watanabe.dbgso.com"]
+  //代替ドメイン(CNAME)の設定
+  # aliases = ["example.com", "www.example.com"] # ここは実際のドメイン名に置き換え
   web_acl_id = aws_wafv2_web_acl.default.arn
   origin {
     domain_name = aws_lb.awsLb.dns_name

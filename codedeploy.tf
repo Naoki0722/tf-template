@@ -1,3 +1,7 @@
+
+#############
+#Code deploy
+#############
 data "aws_iam_policy_document" "codedeploy_assumerole" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -17,10 +21,6 @@ resource "aws_iam_role_policy_attachment" "codedeploy" {
   role = aws_iam_role.codedeploy.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS"
 }
-
-#############
-#Code deploy
-#############
 
 resource "aws_codedeploy_app" "main" {
   compute_platform = "ECS"

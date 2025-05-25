@@ -16,7 +16,7 @@ variable "acmArm" {
 
 variable "gitRep" {
   type        = string
-  description = "対象プロジェクトが格納されているgithubのリポジトリ、Saatisfy/watanabe-test-terraform  の様な形式"
+  description = "対象プロジェクトが格納されているgithubのリポジトリ、Username/repositoryName  の様な形式"
 }
 
 variable "gitRepBranch" {

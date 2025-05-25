@@ -56,13 +56,13 @@ resource "aws_route_table_association" "public_1" {
 
 # EIP (NATゲートウェイ 1a)
 resource "aws_eip" "nat_gateway_0" {
-  vpc        = true
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.awsGateway]
 }
 
 # EIP (NATゲートウェイ 1c)
 resource "aws_eip" "nat_gateway_1" {
-  vpc        = true
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.awsGateway]
 }
 
