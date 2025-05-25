@@ -51,14 +51,14 @@ data "aws_iam_policy_document" "codebuild" {
   }
 
   statement {
-      effect = "Allow"
-      actions = ["codestar-connections:UseConnection"]
-      resources = [aws_codestarconnections_connection.github.arn]
-    }
+    effect    = "Allow"
+    actions   = ["codestar-connections:UseConnection"]
+    resources = [aws_codestarconnections_connection.github.arn]
+  }
   statement {
-      effect = "Allow"
-      actions = [ "secretsmanager:GetSecretValue" ]
-      resources = ["*"]
+    effect    = "Allow"
+    actions   = ["secretsmanager:GetSecretValue"]
+    resources = ["*"]
   }
 }
 

@@ -1,97 +1,97 @@
 resource "aws_wafv2_web_acl" "default" {
-  name = "${local.project_code}-service-Wafv2"
+  name        = "${local.project_code}-service-Wafv2"
   description = "WAF"
-  scope = "CLOUDFRONT"
-  provider = aws.virginia
+  scope       = "CLOUDFRONT"
+  provider    = aws.virginia
 
   default_action {
     allow {}
   }
 
   rule {
-      name = "core"
-      priority = 1
-      override_action {
-        none {}
-      }
+    name     = "core"
+    priority = 1
+    override_action {
+      none {}
+    }
 
-      statement {
-        managed_rule_group_statement {
-            name = "AWSManagedRulesCommonRuleSet"
-            vendor_name = "AWS"
-        }
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
       }
-      visibility_config {
-        cloudwatch_metrics_enabled = false
-        metric_name = "AWSManagedRulesCommonRuleSet"
-        sampled_requests_enabled = true
-      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = false
+      metric_name                = "AWSManagedRulesCommonRuleSet"
+      sampled_requests_enabled   = true
+    }
   }
   rule {
-    name = "AWSManagedRulesSQLiRuleSet"
+    name     = "AWSManagedRulesSQLiRuleSet"
     priority = 2
     override_action {
       none {}
     }
     statement {
       managed_rule_group_statement {
-          name = "AWSManagedRulesSQLiRuleSet"
-          vendor_name =  "AWS"
+        name        = "AWSManagedRulesSQLiRuleSet"
+        vendor_name = "AWS"
       }
     }
     visibility_config {
       cloudwatch_metrics_enabled = false
-      metric_name = "AWSManagedRulesSQLiRuleSet"
-      sampled_requests_enabled = true
+      metric_name                = "AWSManagedRulesSQLiRuleSet"
+      sampled_requests_enabled   = true
     }
   }
 
   rule {
-    name = "AWSManagedRulesKnownBadInputsRuleSet"
+    name     = "AWSManagedRulesKnownBadInputsRuleSet"
     priority = 3
     override_action {
       none {}
     }
     statement {
       managed_rule_group_statement {
-          name = "AWSManagedRulesKnownBadInputsRuleSet"
-          vendor_name = "AWS"
+        name        = "AWSManagedRulesKnownBadInputsRuleSet"
+        vendor_name = "AWS"
       }
     }
     visibility_config {
       cloudwatch_metrics_enabled = false
-      metric_name = "AWSManagedRulesKnownBadInputsRuleSet"
-      sampled_requests_enabled = true
+      metric_name                = "AWSManagedRulesKnownBadInputsRuleSet"
+      sampled_requests_enabled   = true
     }
   }
 
   rule {
-    name = "AWSManagedRulesAmazonIpReputationList"
+    name     = "AWSManagedRulesAmazonIpReputationList"
     priority = 4
     override_action {
       none {}
     }
     statement {
       managed_rule_group_statement {
-          name = "AWSManagedRulesAmazonIpReputationList"
-          vendor_name = "AWS"
+        name        = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
       }
     }
     visibility_config {
       cloudwatch_metrics_enabled = false
-      metric_name = "AWSManagedRulesAmazonIpReputationList"
-      sampled_requests_enabled = true
+      metric_name                = "AWSManagedRulesAmazonIpReputationList"
+      sampled_requests_enabled   = true
     }
   }
 
   visibility_config {
     cloudwatch_metrics_enabled = false
-    metric_name = "acls_name"
-    sampled_requests_enabled = true
+    metric_name                = "acls_name"
+    sampled_requests_enabled   = true
   }
 
   tags = {
-      "Name" = "Test Tag"
+    "Name" = "Test Tag"
   }
 
 }

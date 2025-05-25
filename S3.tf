@@ -36,7 +36,6 @@ resource "aws_s3_bucket_public_access_block" "private" {
 # ログバケットの定義
 resource "aws_s3_bucket" "alb_log" {
   bucket = "${local.project_code}-alb-log-ecs-terraform"
-
 }
 
 # ライフサイクル設定の定義

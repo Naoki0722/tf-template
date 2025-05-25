@@ -10,7 +10,7 @@ environments = [{
 }]
 
 aws = {
-  region            = "ap-northeast-1"
-  profile           = "my profile"
+  region  = "ap-northeast-1"
+  profile = "my profile"
 }
 vpc_cidr = "10.0.0.0/16"
