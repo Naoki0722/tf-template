@@ -131,3 +131,39 @@ resource "aws_route_table_association" "private_1" {
   subnet_id      = aws_subnet.private_1.id
   route_table_id = aws_route_table.private_1.id
 }
+
+# RDS専用プライベートサブネット 1a
+resource "aws_subnet" "rds_private_0" {
+  vpc_id                  = aws_vpc.awsVpc.id
+  cidr_block              = "10.0.67.0/24"
+  availability_zone       = "${local.region}a"
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "${local.project_code}-rds-private-subnet-1a"
+  }
+}
+
+# RDS専用プライベートサブネット 1c
+resource "aws_subnet" "rds_private_1" {
+  vpc_id                  = aws_vpc.awsVpc.id
+  cidr_block              = "10.0.68.0/24"
+  availability_zone       = "${local.region}c"
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = "${local.project_code}-rds-private-subnet-1c"
+  }
+}
+
+# RDSサブネットとルートテーブルの紐付け
+resource "aws_route_table_association" "rds_private_0" {
+  subnet_id      = aws_subnet.rds_private_0.id
+  route_table_id = aws_route_table.private_0.id
+}
+
+# RDSサブネットとルートテーブルの紐付け
+resource "aws_route_table_association" "rds_private_1" {
+  subnet_id      = aws_subnet.rds_private_1.id
+  route_table_id = aws_route_table.private_1.id
+}
